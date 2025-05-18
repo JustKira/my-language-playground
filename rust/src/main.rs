@@ -1,9 +1,25 @@
+mod scanner;
+
+use crate::scanner::*;
+
 use std::{env, error::Error, fs, process::exit};
+
+fn run(source: &str) {
+    let scanner = Scanner::new(source);
+
+    let tokens = scanner.scan_tokens();
+
+    for token in tokens {
+        println!("{:?}", token);
+    }
+
+    todo!()
+}
 
 fn run_file(path: &str) -> Result<(), Box<dyn Error>> {
     let content = fs::read_to_string(path)?;
 
-    // run(content);
+    run(&content);
 
     Ok(())
 }
@@ -25,7 +41,7 @@ fn run_repl() -> Result<(), Box<dyn Error>> {
             continue;
         }
 
-        // run(&buffer);
+        run(&buffer);
     }
 
     Ok(())
@@ -33,7 +49,6 @@ fn run_repl() -> Result<(), Box<dyn Error>> {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<String> = env::args().collect();
-    println!("Command Ran with these args {:?}", args.len() > 2);
 
     match args.len() {
         1 => run_repl()?,
